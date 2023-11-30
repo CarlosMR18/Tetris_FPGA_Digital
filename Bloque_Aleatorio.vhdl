@@ -4,12 +4,12 @@ use IEEE.NUMERIC_STD.ALL;
 -- Falta definir TOP_LFSR con Maquina de Estados
 
 entity Bloque_Aleatorio is
-    Port (	clk : in STD_LOGIC;
-           	reset : in STD_LOGIC;
-	  	FaltaPieza_Flag : in STD_LOGIC;
-		PiezaGenerada_Flag : out STD_LOGIC;
-		PiezaAleatoria : out UNSIGNED;		   
-		--Sin Acabar
+Port (	clk : in STD_LOGIC;
+        reset : in STD_LOGIC;
+	  FaltaPieza_Flag : in STD_LOGIC;
+	PiezaGenerada_Flag : out STD_LOGIC;
+	PiezaAleatoria : out UNSIGNED;		   
+	--Sin Acabar
 		   );
 end Bloque_Aleatorio;
 
@@ -82,6 +82,7 @@ architecture Structure of TOP_LFSR is
 	signal Pos_C_cable : STD_LOGIC_VECTOR(1 downto 0);;
 	
 	--signal E_Aunsigned_cable : STD_LOGIC_VECTOR(10 downto 0);
+		
 begin
 	LFSR1: LFSR port map (	clk->clk, 
 				reset->reset,
@@ -146,5 +147,6 @@ begin
 				Pos_C_cable(1) or 
 				Pos_C_cable(0);
 
-	PiezaGenerada_Flag <=	PiezaElegida and PosicionElegida;			
+	PiezaGenerada_Flag <=	PiezaElegida and PosicionElegida;
+
 end Structure;
