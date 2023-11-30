@@ -2,13 +2,14 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL; --(std_logic; std_logic_vector)
 use IEEE.NUMERIC_STD.ALL;
 -- Falta definir TOP_LFSR con Maquina de Estados
+
 entity Bloque_Aleatorio is
     Port ( clk : in STD_LOGIC;
            reset : in STD_LOGIC;
 		   FaltaPieza_Flag : in STD_LOGIC;
 		   PiezaGenerada_Flag : out STD_LOGIC;
 		   PiezaAleatoria : out UNSIGNED;		   
-		 
+		 --Sin Acabar
 		   );
 end Bloque_Aleatorio;
 
@@ -84,64 +85,66 @@ architecture Structure of TOP_LFSR is
 	--signal E_Aunsigned_cable : STD_LOGIC_VECTOR(10 downto 0);
 begin
 	LFSR1: LFSR port map (	clk->clk, 
-							reset->reset,
-							lfsr_out->lfsr_in_cable(0));						
+				reset->reset,
+				lfsr_out->lfsr_in_cable(0));						
 	LFSR2: LFSR port map (	clk->clk, 
-							reset->reset,
-							lfsr_out->lfsr_in_cable(1));
+				reset->reset,
+				lfsr_out->lfsr_in_cable(1));
 	LFSR3: LFSR port map (	clk->clk, 
-							reset->reset,
-							lfsr_out->lfsr_in_cable(2));
+				reset->reset,
+				lfsr_out->lfsr_in_cable(2));
 	LFSR4: LFSR port map (	clk->clk, 
-							reset->reset,
-							lfsr_out->lfsr_in_cable(3));
+				reset->reset,
+				lfsr_out->lfsr_in_cable(3));
 	LFSR5: LFSR port map (	clk->clk, 
-							reset->reset,
-							lfsr_out->lfsr_in_cable(4));
+				reset->reset,
+				lfsr_out->lfsr_in_cable(4));
 							
 	TOP_LFSR: TOP_LFSR port map (	clk->clk, 
-									reset->reset,
-									lfsr_in->lfsr_in_cable,
-									FaltaPieza_Flag->FaltaPieza_Flag,
-									PiezaElegida->PiezaElegida,
-									PosicionElegida->PosicionElegida,
-									Ena_Tipo->Ena_Tipo,
-									E_Tipo->E_Tipo,
-									E_Pos->E_Pos);
+					reset->reset,
+					lfsr_in->lfsr_in_cable,
+					FaltaPieza_Flag->FaltaPieza_Flag,
+					PiezaElegida->PiezaElegida,
+					PosicionElegida->PosicionElegida,
+					Ena_Tipo->Ena_Tipo,
+					E_Tipo->E_Tipo,
+					E_Pos->E_Pos);
 									
 	DEC_Tipo: DEC2a4 port map (	E->E_Tipo, 
-								S(0)->Tipo_S_cable,
-								S(1)->Tipo_D_cable,
-								S(2)->Tipo_C_cable,
-								ena->Ena_Tipo);
-								
-	DEC_Pos_D: DEC3a8 port map (E->E_Pos, 
-								S(4 downto 0)->Pos_S_cable,
-								ena->Tipo_S_cable);
+					S(0)->Tipo_S_cable,
+					S(1)->Tipo_D_cable,
+					S(2)->Tipo_C_cable,
+					ena->Ena_Tipo);
+							
+	DEC_Pos_D: DEC3a8 port map (	E->E_Pos, 
+					S(4 downto 0)->Pos_S_cable,
+					ena->Tipo_S_cable);
 									
-	DEC_Pos_D: DEC2a4 port map (E->E_Pos(1 downto 0), 
-								S->Pos_D_cable,
-								ena->Tipo_D_cable);
+	DEC_Pos_D: DEC2a4 port map (	E->E_Pos(1 downto 0), 
+					S->Pos_D_cable,
+					ena->Tipo_D_cable);
 	
-	DEC_Pos_C: DEC1a2 port map (E->E_Pos(0), 
-								S->Pos_C_cable,
-								ena->Tipo_C_cable);
+	DEC_Pos_C: DEC1a2 port map (	E->E_Pos(0), 
+					S->Pos_C_cable,
+					ena->Tipo_C_cable);
 								
-	AUnsigned: AUnsigned port map (	E->Pos_C_cable&Pos_D_cable& Pos_S_cable,								
-									PiezaAleatoria->PiezaAleatoria);	
+	AUnsigned: AUnsigned port map (	E->Pos_C_cable&Pos_D_cable&Pos_S_cable,								
+					PiezaAleatoria->PiezaAleatoria);	
 								
 	
-	PiezaElegida <= Tipo_S_cable or Tipo_D_cable or Tipo_C_cable;
-	PosicionElegida <= 	Pos_S_cable(4) or 
-						Pos_S_cable(3) or 
-						Pos_S_cable(2) or 
-						Pos_S_cable(1) or 
-						Pos_S_cable(0) or 
-						Pos_D_cable(3) or 
-						Pos_D_cable(2) or 
-						Pos_D_cable(1) or 
-						Pos_D_cable(0) or
-						Pos_C_cable(1) or 
-						Pos_C_cable(0);
-	PiezaGenerada_Flag 	<=	PiezaElegida and PosicionElegida;			
+	PiezaElegida <= Tipo_S_cable or 
+			Tipo_D_cable or 
+			Tipo_C_cable;
+	PosicionElegida <=	Pos_S_cable(4) or 
+				Pos_S_cable(3) or 
+				Pos_S_cable(2) or 
+				Pos_S_cable(1) or 
+				Pos_S_cable(0) or 
+				Pos_D_cable(3) or 
+				Pos_D_cable(2) or 
+				Pos_D_cable(1) or 
+				Pos_D_cable(0) or
+				Pos_C_cable(1) or 
+				Pos_C_cable(0);
+	PiezaGenerada_Flag <=	PiezaElegida and PosicionElegida;			
 end Structure;
