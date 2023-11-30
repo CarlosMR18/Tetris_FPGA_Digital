@@ -3,13 +3,17 @@ use IEEE.STD_LOGIC_1164.ALL; --(std_logic; std_logic_vector)
 use IEEE.NUMERIC_STD.ALL;
 
 entity LFSR is
-    Port ( clk : in STD_LOGIC;
-           reset : in STD_LOGIC;
-           lfsr_out : out STD_LOGIC);
+Port (	clk : in STD_LOGIC;
+        reset : in STD_LOGIC;
+        lfsr_out : out STD_LOGIC);
 end LFSR;
 
-architecture Behavioral of LFSR is
+
+	
+architecture Behavioral of LFSR is	
+	
     signal lfsr_reg : STD_LOGIC_VECTOR(3 downto 0) := "0000";
+
 begin
     process(clk, reset)
     begin
@@ -26,4 +30,5 @@ begin
     end process;
 
     lfsr_out <= lfsr_reg(3);
+
 end Behavioral;
