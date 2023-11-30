@@ -4,15 +4,14 @@ use IEEE.NUMERIC_STD.ALL;
 -- Falta definir TOP_LFSR con Maquina de Estados
 
 entity Bloque_Aleatorio is
-    Port ( clk : in STD_LOGIC;
-           reset : in STD_LOGIC;
-		   FaltaPieza_Flag : in STD_LOGIC;
-		   PiezaGenerada_Flag : out STD_LOGIC;
-		   PiezaAleatoria : out UNSIGNED;		   
-		 --Sin Acabar
+    Port (	clk : in STD_LOGIC;
+           	reset : in STD_LOGIC;
+	  	FaltaPieza_Flag : in STD_LOGIC;
+		PiezaGenerada_Flag : out STD_LOGIC;
+		PiezaAleatoria : out UNSIGNED;		   
+		--Sin Acabar
 		   );
 end Bloque_Aleatorio;
-
 
 
 architecture Structure of TOP_LFSR is
@@ -20,48 +19,48 @@ architecture Structure of TOP_LFSR is
 	--signal Nombre : STD_LOGIC_VECTOR(3 downto 0) := "0000";
 
 	component LFSR is
-		Port (	clk : in STD_LOGIC;
-				reset : in STD_LOGIC;
-				lfsr_out : out STD_LOGIC);
+	Port (	clk : in STD_LOGIC;
+		reset : in STD_LOGIC;
+		lfsr_out : out STD_LOGIC);
 	end component;
 	
 	component TOP_LFSR is
-    Port ( clk : in STD_LOGIC;
-           reset : in STD_LOGIC;
-           lfsr_in : in STD_LOGIC_VECTOR(4 downto 0);
-		   FaltaPieza_Flag: in STD_LOGIC;
-		   PiezaElegida: in STD_LOGIC;
-		   PosicionElegida: in STD_LOGIC;
+    	Port (	clk : in STD_LOGIC;
+           	reset : in STD_LOGIC;
+           	lfsr_in : in STD_LOGIC_VECTOR(4 downto 0);
+		FaltaPieza_Flag: in STD_LOGIC;
+		PiezaElegida: in STD_LOGIC;
+		PosicionElegida: in STD_LOGIC;
 		   
-		   Ena_Tipo : out STD_LOGIC;
-		   E_Tipo : out STD_LOGIC_VECTOR(1 downto 0);
-		   E_Pos : out STD_LOGIC_VECTOR(2 downto 0);
-		   --Faltan salidas E()
-		   );
+		Ena_Tipo : out STD_LOGIC;
+		E_Tipo : out STD_LOGIC_VECTOR(1 downto 0);
+		E_Pos : out STD_LOGIC_VECTOR(2 downto 0);
+		--Faltan salidas E()
+		);
 	end component;
 	
 	component DEC3a8 is
-    port (  E : in std_logic_vector(2 downto 0);
-            S : out std_logic_vector(7 downto 0);
-            ena: in std_logic);
+    	port (	E : in std_logic_vector(2 downto 0);
+            	S : out std_logic_vector(7 downto 0);
+            	ena: in std_logic);
 	end component;
 	
 	component DEC2a4 is
-		port (	E : in std_logic_vector(1 downto 0);
-				S : out std_logic_vector(3 downto 0);
-				ena: in std_logic);
+	port (	E : in std_logic_vector(1 downto 0);
+		S : out std_logic_vector(3 downto 0);
+		ena: in std_logic);
 	end component;
 	
 	component DEC1a2 is
-		port (	E : in std_logic;
-				S : out std_logic_vector(1 downto 0);
-				ena: in std_logic);
+	port (	E : in std_logic;
+		S : out std_logic_vector(1 downto 0);
+		ena: in std_logic);
 	end component;
 	
 
 	component AUnsigned is
-		port (	E : in std_logic_vector(10 downto 0);
-				PiezaAleatoria : out UNSIGNED;);
+	port (	E : in std_logic_vector(10 downto 0);
+		PiezaAleatoria : out UNSIGNED;);
 	end component;
 
 	signal clk : STD_LOGIC;
@@ -131,10 +130,10 @@ begin
 	AUnsigned: AUnsigned port map (	E->Pos_C_cable&Pos_D_cable&Pos_S_cable,								
 					PiezaAleatoria->PiezaAleatoria);	
 								
-	
 	PiezaElegida <= Tipo_S_cable or 
 			Tipo_D_cable or 
 			Tipo_C_cable;
+
 	PosicionElegida <=	Pos_S_cable(4) or 
 				Pos_S_cable(3) or 
 				Pos_S_cable(2) or 
@@ -146,5 +145,6 @@ begin
 				Pos_D_cable(0) or
 				Pos_C_cable(1) or 
 				Pos_C_cable(0);
+
 	PiezaGenerada_Flag <=	PiezaElegida and PosicionElegida;			
 end Structure;
