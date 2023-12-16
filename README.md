@@ -7,13 +7,13 @@ reset : std_logic;
 
 -- MiPieza
 
-MiPieza_ND : *********; ~ MiPieza_Nivel_Display. [Valores a tomar: 0 (Generacion), 1, 2, 3, 4]
+MiPieza_ND : integer; ~ MiPieza_Nivel_Display. [Valores a tomar: 0 (Generacion), 1, 2, 3, 4]
 
-MiPieza_TP : *********; ~ MiPieza_Tipo_Pieza.  [Valores a tomar: 0 a 127]
+MiPieza_TP : integer; ~ MiPieza_Tipo_Pieza.  [Valores a tomar: 0 a 127]
 
 -- Entorno, displays con piezas fijadas [Valores a tomar: 0 a 127]
 
-E1 : **********; ~ Display primero, aparición pieza 
+E1 : integer; ~ Display primero, aparición pieza 
 
 E2 : **********;  
 
@@ -23,7 +23,7 @@ E4 : **********; ~ Display suelo
 
 -- Puntos
 
-puntos : *********; [Valores enteros: 0, 1,...]
+puntos : integer; [Valores enteros: 0, 1,...]
 
 -- Señal Botones (Con rebotes)
 
