@@ -5,7 +5,7 @@ Trabajo Digital 2023/24 ETSII UPM
 clk : std_logic;
 reset : std_logic;
 
--- MiPieza
+-- MiPieza;
 MiPieza_ND : *********; ~ MiPieza_Nivel_Display. [Valores a tomar: 0 (Generacion), 1, 2, 3, 4]
 MiPieza_TP : *********; ~ MiPieza_Tipo_Pieza.  [Valores a tomar: 0 a 127]
 
