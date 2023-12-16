@@ -33,10 +33,10 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity DescensoFichas is
 Port (clk : in STD_LOGIC;  -- Reloj del sistema
-      reset : in STD_LOGIC;  -- Señal de reinicio
+      reset : in STD_LOGIC;  -- SeÃ±al de reinicio
       phase : in STD_LOGIC_VECTOR (7 downto 0);  -- Nivel del juego
-      fall_signal : out STD_LOGIC  -- Señal para indicar el descenso de la ficha
-      tipo_ficha_flag: in STD_LOGIC_VECTOR (10 downto 0);
+      fall_signal : out STD_LOGIC  -- SeÃ±al para indicar el descenso de la ficha
+      tipo_ficha_flag: in STD_LOGIC_VECTOR (10 downto 0)
  );
 end DescensoFichas;
 
@@ -46,7 +46,7 @@ architecture Behavioral of DescensoFichas is
     signal count : integer := 0;  -- Contador para el temporizador
     signal time_per_level : integer;  -- Tiempo de descenso ajustado por nivel
 begin
-  -- Ajustar tiempo de descenso según el nivel
+  -- Ajustar tiempo de descenso segÃºn el nivel
     if (tipo_ficha_flag < 5) then
         time_per_level <= base_time - (100 * to_integer(unsigned(phase)));
     else
@@ -66,7 +66,7 @@ begin
                -- Incrementar contador
                count <= count + 1;
            else
-               -- Tiempo de descenso alcanzado, enviar señal de caída
+               -- Tiempo de descenso alcanzado, enviar seÃ±al de caÃ­da
                fall_signal <= '1';
                count <= 0;
            end if;
