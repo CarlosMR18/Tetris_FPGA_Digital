@@ -23,7 +23,7 @@ E4 : **********; ~ Display suelo
 
 -- Puntos
 
-puntos : *********; 
+puntos : *********; [Valores enteros: 0, 1,...]
 
 -- Señal Botones (Con rebotes)
 
