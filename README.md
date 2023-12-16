@@ -66,15 +66,15 @@ G_izq : std_logic;
 
 --------------------------------------------------------------------------------------------------------------------
 # BLOQUES
-- Bloque Estructura (main)
-- Bloque CONTROL
-- Bloque Reloj (con Divisor de frecuencia)
-- Bloque Fases (Niveles)
-- Bloque Antirrebote
-- Bloque Acción (Giros y desplazamientos horizontales)
-- Bloque Next (Baja pieza de display)
-- Bloque Generacion_Pieza
-- Bloque Puntos (Comprobar si Displays Completos, cada vez que se fija pieza)
-- Bloques Display [Visualización]
-- Bloques LEDs [Visualización]
+- Bloque Estructura (main) Mila
+- Bloque CONTROL Leyre
+- Bloque Reloj (con Divisor de frecuencia) Lorena
+- Bloque Fases (Niveles) Leyre
+- Bloque Antirrebote Mila
+- Bloque Acción (Giros y desplazamientos horizontales) --Reloj_Juego Carlos
+- Bloque Next (Baja pieza de display) --Reloj_Juego Carlos
+- Bloque Generacion_Pieza Carlos
+- Bloque Puntos (Comprobar si Displays Completos, cada vez que se fija pieza) Carlo
+- Bloques Display [Visualización] Lorena
+- Bloques LEDs [Visualización] Lorena
 
