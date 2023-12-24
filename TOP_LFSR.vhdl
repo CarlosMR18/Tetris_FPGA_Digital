@@ -18,8 +18,7 @@ Port (  clk : in std_logic;
         E_Tipo : out std_logic_vector(1 downto 0);
         E_Pos : out std_logic_vector(2 downto 0);
 		MiPieza_TP_Nuevo : out unsigned(6 downto 0);
-        Generacion_pieza_fin_flag : out std_logic;
-	);		   
+        Generacion_pieza_fin_flag : out std_logic);		   
 end TOP_LFSR;
 
 
@@ -88,6 +87,7 @@ Begin
                when Generando_Posicion =>
                    if(E_Tipo = "00" and SimpleElegida = '1' or E_Tipo = "01" and DobleElegida = '1' or E_Tipo = "10" and CuadradaElegida = '1') then
                     STATE_LFSR <= Espera;
+	      		
 					case Reg_Tipo is
 						when "00" => 
 							if(SimpleElegida = '1') then
@@ -112,10 +112,11 @@ Begin
 									MiPieza_TP_Nuevo <=	"0000000" when "0",
 														"0000000" when "1",
 														"-------" when others;
-						when "00" =>
+						when others =>
 							--Nada
 														
-             end case;       
+             end case;
+	      Generacion_pieza_fin_flag <= '1';
         end if;
     end process;
     Ena_Tipo <= '1' when (STATE_LFSR /= Activo) else
