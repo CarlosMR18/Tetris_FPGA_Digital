@@ -40,21 +40,21 @@ architecture Behavioral of TOP_LFSR is
 	signal aux_fin : std_logic := '0';
 Begin
     
-	LFSR1 : LFSR port map  (clk -> clk,
-                            reset -> reset,
-                            lfsr_out -> lfsr_in(0));
-    LFSR2 : LFSR port map  (clk -> clk,
-                            reset -> reset,
-                            lfsr_out -> lfsr_in(1));	
-    LFSR3 : LFSR port map  (clk -> clk,
-                            reset -> reset,
-                            lfsr_out -> lfsr_in(2));	
-    LFSR4 : LFSR port map  (clk -> clk,
-                            reset -> reset,
-                            lfsr_out -> lfsr_in(3));	
-    LFSR5 : LFSR port map  (clk -> clk,
-                            reset -> reset,
-                            lfsr_out -> lfsr_in(4));
+	LFSR1 : LFSR port map  (clk => clk,
+                            reset => reset,
+                            lfsr_out => lfsr_in(0));
+    LFSR2 : LFSR port map  (clk => clk,
+                            reset => reset,
+                            lfsr_out => lfsr_in(1));	
+    LFSR3 : LFSR port map  (clk => clk,
+                            reset => reset,
+                            lfsr_out => lfsr_in(2));	
+    LFSR4 : LFSR port map  (clk => clk,
+                            reset => reset,
+                            lfsr_out => lfsr_in(3));	
+    LFSR5 : LFSR port map  (clk => clk,
+                            reset => reset,
+                            lfsr_out => lfsr_in(4));
 							
 	entrada_flag : process(clk,reset)
     begin
