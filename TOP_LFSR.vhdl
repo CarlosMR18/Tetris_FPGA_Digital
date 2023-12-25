@@ -92,13 +92,13 @@ Begin
 						when "00" => 
 							if(SimpleElegida = '1') then
 								case E_Pos is
-    when "000" => MiPieza_TP_Nuevo <= "0000001";
-    when "001" => MiPieza_TP_Nuevo <= "0001000";
-    when "010" => MiPieza_TP_Nuevo <= "0010000";
-    when "011" => MiPieza_TP_Nuevo <= "0100000";
-    when "100" => MiPieza_TP_Nuevo <= "1000000";
-    when others => MiPieza_TP_Nuevo <= (others => '0');
-end case;
+									when "000" => MiPieza_TP_Nuevo <= "0000001";
+									when "001" => MiPieza_TP_Nuevo <= "0001000";
+									when "010" => MiPieza_TP_Nuevo <= "0010000";
+									when "011" => MiPieza_TP_Nuevo <= "0100000";
+									when "100" => MiPieza_TP_Nuevo <= "1000000";
+									when others => MiPieza_TP_Nuevo <= (others => '0');
+								end case;
 
 						when "01" => 
 							if(DobleElegida = '1') then
