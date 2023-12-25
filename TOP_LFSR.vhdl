@@ -34,7 +34,7 @@ architecture Behavioral of TOP_LFSR is
 	signal aux_pulso : std_logic_vector(2 downto 0);
 	signal  pulso_flag : std_logic;
 	
-	type state_t is (Espera, Generando_Tipo, Generando_Posicion)
+	type state_t is (Espera, Generando_Tipo, Generando_Posicion);
 	signal  STATE_LFSR : state_t;
 	signal Reg_Tipo : std_logic_vector(1 downto 0);
 	
@@ -86,7 +86,7 @@ Begin
                     
                when Generando_Posicion =>
                    if(E_Tipo = "00" and SimpleElegida = '1' or E_Tipo = "01" and DobleElegida = '1' or E_Tipo = "10" and CuadradaElegida = '1') then
-                    STATE_LFSR <= Espera;
+                    STATE_LFSR <= Espera; 
 	      		
 					case Reg_Tipo is
 						when "00" => 
@@ -116,12 +116,12 @@ Begin
 							--Nada
 														
              end case;
-	      Generacion_pieza_fin_flag <= '1';
+	      
         end if;
     end process;
-    Ena_Tipo <= '1' when (STATE_LFSR /= Activo) else
+    Ena_Tipo <= '1' when (STATE_LFSR /= Espera) else
                 '0';
-    
+    Generacion_pieza_fin_flag <= '1' when (MiPieza_TP_Nuevo /= "0000000");
 
 	
 
