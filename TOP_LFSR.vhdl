@@ -101,16 +101,16 @@ Begin
 						when "01" => 
 							if(DobleElegida = '1') then
 								with E_Pos(1 downto 0) select
-									MiPieza_TP_Nuevo <=	"0100001" when "000",
-														"1100000" when "001",
-														"1010000" when "010",
-														"0011000" when "011",
+									MiPieza_TP_Nuevo <=	"0100001" when "00",
+														"1100000" when "01",
+														"1010000" when "10",
+														"0011000" when "11",
 														"-------" when others;
 						when "10" => 
 							if(CuadradaElegida = '1') then
 								with E_Pos(0) select
-									MiPieza_TP_Nuevo <=	"0000000" when "0",
-														"0000000" when "1",
+									MiPieza_TP_Nuevo <=	"1100011" when "0",
+														"1011100" when "1",
 														"-------" when others;
 						when others =>
 							--Nada
