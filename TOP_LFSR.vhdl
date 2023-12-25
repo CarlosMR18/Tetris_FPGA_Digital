@@ -108,8 +108,8 @@ Begin
 							when "10" => 
 								if(CuadradaElegida = '1') then
 									with E_Pos(0) select
-										MiPieza_TP_Nuevo <=	"1100011" when "0",
-															"1011100" when "1",
+										MiPieza_TP_Nuevo <=	"1100011" when '0',
+															"1011100" when '1',
 															"-------" when others;
 							when others =>
 								MiPieza_TP_Nuevo <= (others => '0');
