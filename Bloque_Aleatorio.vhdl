@@ -55,42 +55,42 @@ architecture Structure of Bloque_Aleatorio is
 	signal CuadradaElegida: std_logic;
 	
 	signal MiPieza_TP_Nuevo: unsigned(6 downto 0);
-	signal MiPieza_ND_Nuevo_interna: unsigned(2 downto 0):="000";
+	signal MiPieza_ND_Nuevo_interna: unsigned(2 downto 0) :="000";
 	signal Generacion_pieza_fin_flag : std_logic;
 
 		
 begin
 
-	LFSR1 : LFSR port mat  (clk -> clk,
-                            reset -> reset,
-                            lfsr_out -> lfsr_cable(0));
-    LFSR2 : LFSR port mat  (clk -> clk,
-                            reset -> reset,
-                            lfsr_out -> lfsr_cable(1));	
-    LFSR3 : LFSR port mat  (clk -> clk,
-                            reset -> reset,
-                            lfsr_out -> lfsr_cable(2));	
-    LFSR4 : LFSR port mat  (clk -> clk,
-                            reset -> reset,
-                            lfsr_out -> lfsr_cable(3));	
-    LFSR5 : LFSR port mat  (clk -> clk,
-                            reset -> reset,
-                            lfsr_out -> lfsr_cable(4));
+	LFSR1 : LFSR port map  (clk => clk,
+                            reset => reset,
+                            lfsr_out => lfsr_cable(0));
+    LFSR2 : LFSR port map  (clk => clk,
+                            reset => reset,
+                            lfsr_out => lfsr_cable(1));	
+    LFSR3 : LFSR port map  (clk => clk,
+                            reset => reset,
+                            lfsr_out => lfsr_cable(2));	
+    LFSR4 : LFSR port map  (clk => clk,
+                            reset => reset,
+                            lfsr_out => lfsr_cable(3));	
+    LFSR5 : LFSR port map  (clk => clk,
+                            reset => reset,
+                            lfsr_out => lfsr_cable(4));
 							
-	TOP_LFSR: TOP_LFSR port map (	clk -> clk, 
-									reset -> reset,
-									lfsr_in -> lfsr_cable,
-									Generacion_pieza_flag -> Generacion_pieza_flag,
-									TipoElegido -> TipoElegido,
-									SimpleElegida -> SimpleElegida,
-	                                DobleElegida -> DobleElegida,
-			                        CuadradaElegida -> CuadradaElegida,
+	TOP_LFSR: TOP_LFSR port map (	clk => clk, 
+									reset => reset,
+									lfsr_in => lfsr_cable,
+									Generacion_pieza_flag => Generacion_pieza_flag,
+									TipoElegido => TipoElegido,
+									SimpleElegida => SimpleElegida,
+	                                DobleElegida => DobleElegida,
+			                        CuadradaElegida => CuadradaElegida,
 			                        
-			                        Ena_Tipo -> Ena_Tipo,
-			                        E_Tipo -> E_Tipo,
-                                    E_Pos -> E_Pos,
-			                        MiPieza_TP_Nuevo -> MiPieza_TP_Nuevo,
-			                        Generacion_pieza_fin_flag -> Generacion_pieza_fin_flag);
+			                        Ena_Tipo => Ena_Tipo,
+			                        E_Tipo => E_Tipo,
+                                    E_Pos => E_Pos,
+			                        MiPieza_TP_Nuevo => MiPieza_TP_Nuevo,
+			                        Generacion_pieza_fin_flag => Generacion_pieza_fin_flag);
 
 	TipoElegido <= 	'1' when (E_Tipo /= "11" and Ena_Tipo = '1') else
 					'0';
