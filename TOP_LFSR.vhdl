@@ -37,7 +37,7 @@ architecture Behavioral of TOP_LFSR is
 	type state_t is (Espera, Generando_Tipo, Generando_Posicion);
 	signal  STATE_LFSR : state_t;
 	signal Reg_Tipo : std_logic_vector(1 downto 0);
-	
+	signal aux_fin : std_logic;
 Begin
     
 	LFSR1 : LFSR port mat  (clk -> clk,
@@ -78,6 +78,7 @@ Begin
                    if(Generacion_pieza_flag = '1') then
                     STATE_LFSR <= Generando_Tipo;
 					Reg_Tipo <= (others => '0');
+					aux_fin <= '0';
 					
                when Generando_Tipo =>
                    if(TipoElegido = '1') then
@@ -86,8 +87,7 @@ Begin
                     
                when Generando_Posicion =>
                    if(E_Tipo = "00" and SimpleElegida = '1' or E_Tipo = "01" and DobleElegida = '1' or E_Tipo = "10" and CuadradaElegida = '1') then
-                    STATE_LFSR <= Espera; 
-	      		
+					
 					case Reg_Tipo is
 						when "00" => 
 							if(SimpleElegida = '1') then
@@ -115,14 +115,16 @@ Begin
 						when others =>
 							--Nada
 														
-             end case;
-	      
+					end case;
+					
+					aux_fin <= '1';
+					STATE_LFSR <= Espera;
         end if;
     end process;
+	
     Ena_Tipo <= '1' when (STATE_LFSR /= Espera) else
                 '0';
-    Generacion_pieza_fin_flag <= '1' when (MiPieza_TP_Nuevo /= "0000000");
-
-	
+    Generacion_pieza_fin_flag <=	'1' when (aux_fin = '1') else
+									'0';
 
 end Behavioral;
