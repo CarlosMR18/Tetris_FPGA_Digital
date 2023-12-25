@@ -9,9 +9,7 @@ Port (	clk : in std_logic;
 		Generacion_pieza_flag : in std_logic;
 		MiPieza_ND_Nuevo : out unsigned(2 downto 0);
 		MiPieza_TP_Nuevo : out unsigned(6 downto 0);
-		Generacion_pieza_fin_flag : out unsigned;
-		--Sin Acabar
-		   );
+		Generacion_pieza_fin_flag : out unsigned);		   );
 end Bloque_Aleatorio;
 
 
