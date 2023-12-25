@@ -1,7 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL; --(std_logic; std_logic_vector)
 use IEEE.NUMERIC_STD.ALL;
--- Falta definir TOP_LFSR con Maquina de Estados
 
 entity Bloque_Aleatorio is
 Port (	clk : in std_logic;
@@ -14,8 +13,6 @@ end Bloque_Aleatorio;
 
 
 architecture Structure of Bloque_Aleatorio is
-    -- component
-	--signal Nombre : STD_LOGIC_VECTOR(3 downto 0) := "0000";
 
 	component LFSR is
 	Port (	clk : in std_logic;
@@ -42,44 +39,20 @@ architecture Structure of Bloque_Aleatorio is
 			Generacion_pieza_fin_flag : out std_logic);		   
 	component TOP_LFSR;
 
-	
-	component DEC3a8 is
-    	port (	E : in std_logic_vector(2 downto 0);
-            	S : out std_logic_vector(7 downto 0);
-            	ena: in std_logic);
-	end component;
-	
-	component DEC2a4 is
-	port (	E : in std_logic_vector(1 downto 0);
-		S : out std_logic_vector(3 downto 0);
-		ena: in std_logic);
-	end component;
-
-
-	component AUnsigned is
-	port (	E : in std_logic_vector(10 downto 0);
-		PiezaAleatoria : out UNSIGNED;);
-	end component;
-
 	signal clk : std_logic;
 	signal reset : std_logic;
 	
 	signal lfsr_cable : std_logic_vector(4 downto 0);
-	
-	signal TipoElegido : std_logic;
-	
-	signal Tipo_S_cable : std_logic;
-	signal Tipo_D_cable : std_logic;
-	signal Tipo_C_cable : std_logic;
-	
+	signal Generacion_pieza_flag : std_logic;
+
 	signal Ena_Tipo : std_logic;
 	signal E_Tipo : std_logic_vector(1 downto 0);
 	signal E_Pos : std_logic_vector(2 downto 0);
-	
-	
-	signal Pos_S_cable: std_logic_vector(4 downto 0);
-	signal Pos_D_cable: std_logic_vector(3 downto 0);
-	signal Pos_C_cable : std_logic_vector(1 downto 0);
+
+	signal TipoElegido : std_logic;
+	signal SimpleElegida: std_logic;
+	signal DobleElegida: std_logic;
+	signal CuadradaElegida: std_logic;
 	
 	signal MiPieza_TP_Nuevo: unsigned(6 downto 0);
 	signal MiPieza_ND_Nuevo_interna: unsigned(2 downto 0):="000";
@@ -109,31 +82,35 @@ begin
 									lfsr_in -> lfsr_cable,
 									Generacion_pieza_flag -> Generacion_pieza_flag,
 									TipoElegido -> TipoElegido,
-									SimpleElegida -> Tipo_S_cable,
-	                                DobleElegida -> Tipo_D_cable,
-			                        CuadradaElegid -> Tipo_C_cable,
+									SimpleElegida -> SimpleElegida,
+	                                DobleElegida -> DobleElegida,
+			                        CuadradaElegida -> CuadradaElegida,
 			                        
 			                        Ena_Tipo -> Ena_Tipo,
 			                        E_Tipo -> E_Tipo,
                                     E_Pos -> E_Pos,
 			                        MiPieza_TP_Nuevo -> MiPieza_TP_Nuevo,
 			                        Generacion_pieza_fin_flag -> Generacion_pieza_fin_flag);
-			
-			
-			
-	
-	DEC_Tipo: DEC2a4 port map (	E->E_Tipo, 
-								S(2 downto 0)->Tipo_C_cable&Tipo_D_cable&Tipo_S_cable,
-								ena->Ena_Tipo);
-							
-	DEC_Pos: DEC3a8 port map (	E->E_Pos, 
-								S->Pos_S_cable,
-								ena->TipoElegido);
-								
-	TipoElegido <= Tipo_S_cable or 
-					Tipo_D_cable or 
-					Tipo_C_cable;
 
+	TipoElegido <= 	'1' when (E_Tipo /= "11" and Ena_Tipo = '1') else
+					'0';
+	SimpleElegida <=	'1' when (E_Tipo = "00" and E_Pos = "000") else
+						'1' when (E_Tipo = "00" and E_Pos = "001") else
+						'1' when (E_Tipo = "00" and E_Pos = "010") else
+						'1' when (E_Tipo = "00" and E_Pos = "011") else
+						'1' when (E_Tipo = "00" and E_Pos = "100") else
+						'0';
+	DobleElegida <=	'1' when (E_Tipo = "01" and E_Pos(1 downto 0) = "00") else
+					'1' when (E_Tipo = "01" and E_Pos(1 downto 0) = "01") else
+                    '1' when (E_Tipo = "01" and E_Pos(1 downto 0) = "10") else
+                    '1' when (E_Tipo = "01" and E_Pos(1 downto 0) = "11") else
+					'0';
+	CuadradaElegida <=	'1' when (E_Tipo = "10" and E_Pos(0) = "0") else
+						'1' when (E_Tipo = "10" and E_Pos(0) = "1") else
+						'0';
+						
 	MiPieza_ND_Nuevo <= MiPieza_ND_Nuevo_interna;
 	
 end Structure;
+	
+	
