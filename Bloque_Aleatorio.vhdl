@@ -8,7 +8,7 @@ Port (	clk : in std_logic;
 		Generacion_pieza_flag : in std_logic;
 		MiPieza_ND_Nuevo : out unsigned(2 downto 0);
 		MiPieza_TP_Nuevo : out unsigned(6 downto 0);
-		Generacion_pieza_fin_flag : out unsigned);		   );
+		Generacion_pieza_fin_flag : out unsigned);
 end Bloque_Aleatorio;
 
 
@@ -94,23 +94,23 @@ begin
 
 	TipoElegido <= 	'1' when (E_Tipo /= "11" and Ena_Tipo = '1') else
 					'0';
-	SimpleElegida <=	'1' when (E_Tipo = "00" and E_Pos = "000") else
-						'1' when (E_Tipo = "00" and E_Pos = "001") else
-						'1' when (E_Tipo = "00" and E_Pos = "010") else
-						'1' when (E_Tipo = "00" and E_Pos = "011") else
-						'1' when (E_Tipo = "00" and E_Pos = "100") else
+					
+	SimpleElegida <=	'1' when (TipoElegido = '1' and E_Tipo = "00" and E_Pos = "000") else
+						'1' when (TipoElegido = '1' and E_Tipo = "00" and E_Pos = "001") else
+						'1' when (TipoElegido = '1' and E_Tipo = "00" and E_Pos = "010") else
+						'1' when (TipoElegido = '1' and E_Tipo = "00" and E_Pos = "011") else
+						'1' when (TipoElegido = '1' and E_Tipo = "00" and E_Pos = "100") else
 						'0';
-	DobleElegida <=	'1' when (E_Tipo = "01" and E_Pos(1 downto 0) = "00") else
-					'1' when (E_Tipo = "01" and E_Pos(1 downto 0) = "01") else
-                    '1' when (E_Tipo = "01" and E_Pos(1 downto 0) = "10") else
-                    '1' when (E_Tipo = "01" and E_Pos(1 downto 0) = "11") else
+						
+	DobleElegida <=	'1' when (TipoElegido = '1' and E_Tipo = "01" and E_Pos(1 downto 0) = "00") else
+					'1' when (TipoElegido = '1' and E_Tipo = "01" and E_Pos(1 downto 0) = "01") else
+                    '1' when (TipoElegido = '1' and E_Tipo = "01" and E_Pos(1 downto 0) = "10") else
+                    '1' when (TipoElegido = '1' and E_Tipo = "01" and E_Pos(1 downto 0) = "11") else
 					'0';
-	CuadradaElegida <=	'1' when (E_Tipo = "10" and E_Pos(0) = "0") else
-						'1' when (E_Tipo = "10" and E_Pos(0) = "1") else
+					
+	CuadradaElegida <=	'1' when (TipoElegido = '1' and E_Tipo = "10") else
 						'0';
 						
 	MiPieza_ND_Nuevo <= MiPieza_ND_Nuevo_interna;
 	
 end Structure;
-	
-	
