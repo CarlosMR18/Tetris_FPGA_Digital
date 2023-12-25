@@ -5,23 +5,18 @@ use IEEE.NUMERIC_STD.ALL;
 entity TOP_LFSR is
 Port (  clk : in std_logic;
         reset : in std_logic;
-        
         lfsr_in : in std_logic_vector(4 downto 0);
         Generacion_pieza_flag : in std_logic;
-        
 		TipoElegido: in std_logic;
         SimpleElegida: in std_logic;
 		DobleElegida: in std_logic;
-		CuadradaElegida: in std_logic;
-		   
+		CuadradaElegida: in std_logic;   
         Ena_Tipo : out std_logic;
         E_Tipo : out std_logic_vector(1 downto 0);
         E_Pos : out std_logic_vector(2 downto 0);
 		MiPieza_TP_Nuevo : out unsigned(6 downto 0);
         Generacion_pieza_fin_flag : out std_logic);		   
 end TOP_LFSR;
-
-
 
 architecture Behavioral of TOP_LFSR is
 
@@ -76,52 +71,56 @@ Begin
 		   
                when Espera =>
                    if (Generacion_pieza_flag = '1') then
-                    STATE_LFSR <= Generando_Tipo;
-					Reg_Tipo <= (others => '0');
-					aux_fin <= '0';
+						STATE_LFSR <= Generando_Tipo;
+						Reg_Tipo <= (others => '0');
+						aux_fin <= '0';
+					end if;
 					
                when Generando_Tipo =>
                    if (TipoElegido = '1') then
-                    STATE_LFSR <= Generando_Posicion;
-					Reg_Tipo <= E_Tipo;
-                    
+						STATE_LFSR <= Generando_Posicion;
+						Reg_Tipo <= E_Tipo;
+                    end if;
+					
                when Generando_Posicion =>
-                   if ((E_Tipo = "00" and SimpleElegida = '1') or (E_Tipo = "01" and DobleElegida = '1') or (E_Tipo = "10" and CuadradaElegida = '1')) then
-					
-					case Reg_Tipo is
-						when "00" => 
-							if(SimpleElegida = '1') then
-								case E_Pos is
-									when "000" => MiPieza_TP_Nuevo <= "0000001";
-									when "001" => MiPieza_TP_Nuevo <= "0001000";
-									when "010" => MiPieza_TP_Nuevo <= "0010000";
-									when "011" => MiPieza_TP_Nuevo <= "0100000";
-									when "100" => MiPieza_TP_Nuevo <= "1000000";
-									when others => MiPieza_TP_Nuevo <= (others => '0');
-								end case;
-
-						when "01" => 
-							if(DobleElegida = '1') then
-								with E_Pos(1 downto 0) select
-									MiPieza_TP_Nuevo <=	"0100001" when "00",
-														"1100000" when "01",
-														"1010000" when "10",
-														"0011000" when "11",
-														"-------" when others;
-						when "10" => 
-							if(CuadradaElegida = '1') then
-								with E_Pos(0) select
-									MiPieza_TP_Nuevo <=	"1100011" when "0",
-														"1011100" when "1",
-														"-------" when others;
-						when others =>
-							MiPieza_TP_Nuevo <= (others => '0');
-														
-					end case;
-					
-					aux_fin <= '1';
-					STATE_LFSR <= Espera;
-        end if;
+					if ((E_Tipo = "00" and SimpleElegida = '1') or (E_Tipo = "01" and DobleElegida = '1') or (E_Tipo = "10" and CuadradaElegida = '1')) then
+						
+						case Reg_Tipo is
+							when "00" => 
+								if(SimpleElegida = '1') then
+									case E_Pos is
+										when "000" => MiPieza_TP_Nuevo <= "0000001";
+										when "001" => MiPieza_TP_Nuevo <= "0001000";
+										when "010" => MiPieza_TP_Nuevo <= "0010000";
+										when "011" => MiPieza_TP_Nuevo <= "0100000";
+										when "100" => MiPieza_TP_Nuevo <= "1000000";
+										when others => MiPieza_TP_Nuevo <= (others => '0');
+									end case;
+	
+							when "01" => 
+								if(DobleElegida = '1') then
+									with E_Pos(1 downto 0) select
+										MiPieza_TP_Nuevo <=	"0100001" when "00",
+															"1100000" when "01",
+															"1010000" when "10",
+															"0011000" when "11",
+															"-------" when others;
+							when "10" => 
+								if(CuadradaElegida = '1') then
+									with E_Pos(0) select
+										MiPieza_TP_Nuevo <=	"1100011" when "0",
+															"1011100" when "1",
+															"-------" when others;
+							when others =>
+								MiPieza_TP_Nuevo <= (others => '0');
+															
+						end case;
+						
+						aux_fin <= '1';
+						STATE_LFSR <= Espera;
+					end if;
+			end case;
+		end if;	
     end process;
 	
     Ena_Tipo <= '1' when (STATE_LFSR /= Espera) else
