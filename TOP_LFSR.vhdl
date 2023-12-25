@@ -96,7 +96,8 @@ Begin
 										when "100" => MiPieza_TP_Nuevo <= "1000000";
 										when others => MiPieza_TP_Nuevo <= (others => '0');
 									end case;
-	
+								end if;
+								
 							when "01" => 
 								if(DobleElegida = '1') then
 									with E_Pos(1 downto 0) select
@@ -105,12 +106,16 @@ Begin
 															"1010000" when "10",
 															"0011000" when "11",
 															"-------" when others;
+								end if;	
+								
 							when "10" => 
 								if(CuadradaElegida = '1') then
 									with E_Pos(0) select
 										MiPieza_TP_Nuevo <=	"1100011" when '0',
 															"1011100" when '1',
 															"-------" when others;
+								end if;
+								
 							when others =>
 								MiPieza_TP_Nuevo <= (others => '0');
 															
