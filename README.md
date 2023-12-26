@@ -7,7 +7,7 @@ reset : std_logic;
 
 -- MiPieza
 
-MiPieza_ND : unsigned(6 downto 0); ~ MiPieza_Nivel_Display. [Valores a tomar: 0 (Generacion), 1, 2, 3, 4]
+MiPieza_ND : unsigned(2 downto 0); ~ MiPieza_Nivel_Display. [Valores a tomar: 0 (Generacion), 1, 2, 3, 4]
 
 MiPieza_TP : unsigned(6 downto 0); ~ MiPieza_Tipo_Pieza.  [Valores a tomar: 0 a 127]
 
@@ -59,6 +59,16 @@ G_dcha : std_logic;
 G_izq : std_logic;
 
 --FLAGSs
+
+Generacion_pieza_flag : std:logic; --Bloque_Aleatorio
+
+Generacion_pieza_fin_flag : std:logic; --Bloque_Aleatorio
+
+Next_Flag : std:logic; --Bloque_Next
+
+PiezaFijada_Flag : std:logic; --Bloque_Next
+
+PiezaBajada_Flag : std:logic; --Bloque_Next
 
 ********_Flag : std:logic;
 
