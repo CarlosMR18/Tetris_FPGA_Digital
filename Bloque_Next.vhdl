@@ -118,7 +118,7 @@ end Bloque_Next;
 
 architecture Behavioral of Bloque_Next is
 	signal E_int : unsigned(6 downto 0);
-	signal MiPieza_ND_int  : unsigned(6 downto 0);
+	signal MiPieza_TP_int  : unsigned(6 downto 0);
 	
 	signal Producto_BitaBit : unsigned(6 downto 0);
 	signal Suma_BitaBit : unsigned(6 downto 0);
@@ -202,8 +202,14 @@ E_int <=	E_aux(6 downto 3)&aux_seg_C&aux_seg_B&E_aux(0) when (MiPieza_ND = "000"
 			E4 when (MiPieza_ND = "011" and ESTADO = RAPIDO_BAJO) else
 			"1111111"; --NO ACTUA 
 
-Producto_BitaBit <= E_int and MiPieza_TP;
-Suma_BitaBit <= E_int or MiPieza_TP;
+MiPieza_TP_int <=	"0000010" when (ESTADO = RAPIDO_ALTO and MiPieza_TP(5) = '1'),
+					"0000100" when (ESTADO = RAPIDO_ALTO and MiPieza_TP(4) = '1'),
+					"0010000" when (ESTADO = RAPIDO_BAJO and MiPieza_TP(1) = '1'),
+					"0001000" when (ESTADO = RAPIDO_BAJO and MiPieza_TP(2) = '1'),
+					MiPieza_TP when others;
+
+Producto_BitaBit <= E_int and MiPieza_TP_int;
+Suma_BitaBit <= E_int or MiPieza_TP_int;
 
 with ESTADO select
 	MiPieza_ND_act <=	MiPieza_ND_int when RAPIDO_ALTO,
