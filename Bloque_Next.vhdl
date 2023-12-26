@@ -180,3 +180,53 @@ begin
 	end process actualizo_bajada_o_fijada;
 
 end Behavioral;
+
+type state_t is (ESPERA, RAPIDO, LENTO);
+signal ESTADO : state_t;
+signal ena_time : std_logic;
+
+process(clk, reset)
+	if (reset = '1') then
+		ESTADO <= ESPERA;
+		ena_time <= '1';
+	elsif (clk = '1' and clk'event) then
+		case ESTADO is
+			when ESPERA =>
+				if (Next_Flag = '1') then
+					with MiPieza_TP is
+						ESTADO <=	RAPIDO when "0100000",  
+									RAPIDO when "0010000",
+									RAPIDO when "0000010",
+									RAPIDO when "0000100",
+									LENTO when others;
+				end if;
+				
+			when LENTO =>
+				ena_time <= not(ena_time);
+				ESTADO <= ESPERA;
+				
+			when RAPIDO =>
+				ena_time <= '0';
+				ESTADO <= ESPERA;
+		end case;		
+	end if;
+end process;	
+
+signal NoActua_Flag : std_logic;
+
+NoActua_Flag <=	'1' when (ESTADO = LENTO and ena_time = '0') else
+				'0';
+				
+PiezaFijada_Flag <=	'1' when (ESTADO = LENTO and ena_time = '1' and Producto_BitaBit/="0000000") else
+					'1' when (ESTADO = LENTO and Producto_BitaBit/="0000000") else
+					'0';
+E_int <=	E1 when (MiPieza_ND = "000" and (MiPieza_TP = "0100000" or MiPieza_TP = "0010000" or MiPieza_TP = "0000010" or MiPieza_TP = "0000100") or ena_time = '1'),
+			E2 when (MiPieza_ND = "001" and (MiPieza_TP = "0100000" or MiPieza_TP = "0010000" or MiPieza_TP = "0000010" or MiPieza_TP = "0000100") or ena_time = '1'),
+			E3 when (MiPieza_ND = "010" and (MiPieza_TP = "0100000" or MiPieza_TP = "0010000" or MiPieza_TP = "0000010" or MiPieza_TP = "0000100") or ena_time = '1'),
+			E2 when (MiPieza_ND = "011" and (MiPieza_TP = "0100000" or MiPieza_TP = "0010000" or MiPieza_TP = "0000010" or MiPieza_TP = "0000100") or ena_time = '1'),
+			(others => '1'
+
+			
+PiezaBajada_Flag <=	'1' when (ESTADO = LENTO and ena_time = '1' and Producto_BitaBit = "0000000") else
+					'1' when (ESTADO = LENTO and Producto_BitaBit = "0000000") else
+					'0';
