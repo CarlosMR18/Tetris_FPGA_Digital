@@ -102,7 +102,8 @@ entity Bloque_Next is
 		   E2 : in unsigned(6 downto 0);
 		   E3 : in unsigned(6 downto 0);
 		   E4 : in unsigned(6 downto 0);
-
+		   
+		   MiPieza_ND_int : out unsigned(6 downto 0);
 		   MiPieza_ND_act : out unsigned(6 downto 0);   
 		   PiezaFijada_Flag : out std_logic;
 		   PiezaBajada_Flag : out std_logic;
@@ -117,73 +118,21 @@ end Bloque_Next;
 
 architecture Behavioral of Bloque_Next is
 	signal E_int : unsigned(6 downto 0);
+	signal MiPieza_ND_int  : unsigned(6 downto 0);
 	
 	signal Producto_BitaBit : unsigned(6 downto 0);
 	signal Suma_BitaBit : unsigned(6 downto 0);
 	signal Ei_transformada : unsigned(6 downto 0);
+	signal E_aux : unsigned(6 downto 0);
+	signal aux_seg_E : std_logic;
+	signal aux_seg_F : std_logic;
 	
-begin
-	localizo_Display: process (clk, reset, Next_Flag)
-	begin                                  
-		if (reset = '1') then
-			E_int <= (others => '0');
-		elsif (clk = '1' and clk'event) then
-			if (Next_Flag = '1') then 
-				with MiPieza_ND select             
-					E_int <= 	E1 when "00",      
-								E2 when "01",
-								E3 when "10",
-								E4 when "11",
-								"1111111" when others;			
-					E_int(1) <= E_int(1) or E_int(5);
-					E_int(2) <= E_int(2) or E_int(4);
-					
-			end if;
-		end if;
-	end process localizo_Display;
-	
-	Producto_BitaBit <= E_int and MiPieza_TP;
-	Suma_BitaBit <= E_int or MiPieza_TP;
-	
-	actualizo_bajada_o_fijada: process(Producto_BitaBit, PiezaFijada_Flag, PiezaBajada_Flag, MiPieza_ND_act, MiPieza_ND, E1, E2, E3, E4, Ei_transformada, E1_act, E2_act, E3_act, E4_act)
-	begin 
-		if(Producto_BitaBit = "0000000") then 	-- Accion Compatible (Baja Pieza)
-			PiezaFijada_Flag <= '1';
-			PiezaBajada_Flag <= '0';
-			MiPieza_ND_act <= MiPieza_ND + 1;
-		else 									-- Accion Incompatible (Fija Pieza)
-			PiezaFijada_Flag <= '0';
-			PiezaBajada_Flag <= '1';
-			case MiPieza_ND_act is
-				when "00" => (	E1_act <= Ei_transformada,
-								E2_act <= E2,
-								E3_act <= E3,
-								E4_act <= E4);
-								
-				when "01" => (	E1_act <= E1,
-								E2_act <= Ei_transformada,
-								E3_act <= E3,
-								E4_act <= E4);
-								
-				when "10" => (	E1_act <= E1,
-								E2_act <= E2,
-								E3_act <= Ei_transformada,
-								E4_act <= E4);
-								
-				when "11" => (	E1_act <= E1,
-								E2_act <= E2,
-								E3_act <= E3,
-								E4_act <= Ei_transformada);
-								
-		end if;
+	type state_t is (ESPERA, RAPIDO_ALTO, RAPIDO_BAJO, LENTO);
+	signal ESTADO : state_t;
+	signal ena_time : std_logic;
+	signal NoActua_Flag : std_logic;
 		
-	end process actualizo_bajada_o_fijada;
-
-end Behavioral;
-
-type state_t is (ESPERA, RAPIDO, LENTO);
-signal ESTADO : state_t;
-signal ena_time : std_logic;
+begin
 
 process(clk, reset)
 	if (reset = '1') then
@@ -191,42 +140,74 @@ process(clk, reset)
 		ena_time <= '1';
 	elsif (clk = '1' and clk'event) then
 		case ESTADO is
-			when ESPERA =>
+			when ESPERA => 
 				if (Next_Flag = '1') then
 					with MiPieza_TP is
-						ESTADO <=	RAPIDO when "0100000",  
-									RAPIDO when "0010000",
-									RAPIDO when "0000010",
-									RAPIDO when "0000100",
+						ESTADO <=	RAPIDO_ALTO when "0100000",  
+									RAPIDO_ALTO when "0010000",
+									RAPIDO_BAJO when "0000010",
+									RAPIDO_BAJO when "0000100",
 									LENTO when others;
 				end if;
 				
-			when LENTO =>
-				ena_time <= not(ena_time);
+			when LENTO =>  --Mi Pieza es no Simple Horizontal, Velocidad de caida pieza Lenta
+				ena_time <= not(ena_time); --Señal auxiliar, duplica periodo. 
 				ESTADO <= ESPERA;
 				
-			when RAPIDO =>
+			when RAPIDO_ALTO =>  --Mi Pieza es Simple Horizontal contenida en segmento E o F, Velocidad de caida pieza Rápida
+				ena_time <= '0';
+				ESTADO <= ESPERA;
+			
+			when RAPIDO_BAJO =>  --Mi Pieza es Simple Horizontal contenida en segmento B o C, Velocidad de caida pieza Rápida
 				ena_time <= '0';
 				ESTADO <= ESPERA;
 		end case;		
 	end if;
 end process;	
 
-signal NoActua_Flag : std_logic;
-
+-- Banderas
 NoActua_Flag <=	'1' when (ESTADO = LENTO and ena_time = '0') else
 				'0';
 				
 PiezaFijada_Flag <=	'1' when (ESTADO = LENTO and ena_time = '1' and Producto_BitaBit/="0000000") else
-					'1' when (ESTADO = LENTO and Producto_BitaBit/="0000000") else
+					'1' when (ESTADO = RAPIDO_ALTO and Producto_BitaBit/="0000000") else
+					'1' when (ESTADO = RAPIDO_BAJO and Producto_BitaBit/="0000000") else
 					'0';
-E_int <=	E1 when (MiPieza_ND = "000" and (MiPieza_TP = "0100000" or MiPieza_TP = "0010000" or MiPieza_TP = "0000010" or MiPieza_TP = "0000100") or ena_time = '1'),
-			E2 when (MiPieza_ND = "001" and (MiPieza_TP = "0100000" or MiPieza_TP = "0010000" or MiPieza_TP = "0000010" or MiPieza_TP = "0000100") or ena_time = '1'),
-			E3 when (MiPieza_ND = "010" and (MiPieza_TP = "0100000" or MiPieza_TP = "0010000" or MiPieza_TP = "0000010" or MiPieza_TP = "0000100") or ena_time = '1'),
-			E2 when (MiPieza_ND = "011" and (MiPieza_TP = "0100000" or MiPieza_TP = "0010000" or MiPieza_TP = "0000010" or MiPieza_TP = "0000100") or ena_time = '1'),
-			(others => '1'
 
-			
 PiezaBajada_Flag <=	'1' when (ESTADO = LENTO and ena_time = '1' and Producto_BitaBit = "0000000") else
 					'1' when (ESTADO = LENTO and Producto_BitaBit = "0000000") else
 					'0';
+
+
+E_aux <=	E1 when (MiPieza_ND = "000" and ESTADO = LENTO and ena_time = '1') else --LENTO
+			E2 when (MiPieza_ND = "001" and ESTADO = LENTO and ena_time = '1') else
+			E3 when (MiPieza_ND = "010" and ESTADO = LENTO and ena_time = '1') else
+			E4 when (MiPieza_ND = "011" and ESTADO = LENTO and ena_time = '1') else
+			"1111111";		
+			
+aux_seg_B <= E_aux(1) or E_aux(5); -- Estando el segmento F acupado, no puede bajar al segmento B aunque está libre
+aux_seg_C <= E_aux(2) or E_aux(4); -- Estando el segmento E acupado, no puede bajar al segmento C aunque está libre
+					
+E_int <=	E_aux(6 downto 3)&aux_seg_C&aux_seg_B&E_aux(0) when (MiPieza_ND = "000" and ESTADO = LENTO and ena_time = '1') else --LENTO
+			E_aux(6 downto 3)&aux_seg_C&aux_seg_B&E_aux(0) when (MiPieza_ND = "001" and ESTADO = LENTO and ena_time = '1') else
+			E_aux(6 downto 3)&aux_seg_C&aux_seg_B&E_aux(0) when (MiPieza_ND = "010" and ESTADO = LENTO and ena_time = '1') else
+			E_aux(6 downto 3)&aux_seg_C&aux_seg_B&E_aux(0) when (MiPieza_ND = "011" and ESTADO = LENTO and ena_time = '1') else		
+			E1 when (MiPieza_ND = "000" and ESTADO = RAPIDO_ALTO) else --RAPIDO_ALTO
+			E1 when (MiPieza_ND = "001" and ESTADO = RAPIDO_ALTO) else
+			E2 when (MiPieza_ND = "010" and ESTADO = RAPIDO_ALTO) else
+			E3 when (MiPieza_ND = "011" and ESTADO = RAPIDO_ALTO) else
+			E4 when (MiPieza_ND = "100" and ESTADO = RAPIDO_ALTO) else
+			E2 when (MiPieza_ND = "001" and ESTADO = RAPIDO_BAJO) else --RAPIDO_BAJO
+			E3 when (MiPieza_ND = "010" and ESTADO = RAPIDO_BAJO) else
+			E4 when (MiPieza_ND = "011" and ESTADO = RAPIDO_BAJO) else
+			"1111111"; --NO ACTUA 
+
+Producto_BitaBit <= E_int and MiPieza_TP;
+Suma_BitaBit <= E_int or MiPieza_TP;
+
+with ESTADO select
+	MiPieza_ND_act <=	MiPieza_ND_int when RAPIDO_ALTO,
+						MiPieza_ND_int when RAPIDO_BAJO,
+						MiPieza_ND when others;
+
+end Behavioral;
