@@ -18,7 +18,7 @@ begin
     process(clk, reset)
     begin
         if (reset = '1') then
-            lfsr_reg <= (others => '0'); -- Reinicio LFSR para señal reset			
+            --lfsr_reg <= (others => '0');  No inicio LFSR con señal reset			
         elsif (clk'event and clk = '1') then
             -- Lógica del LFSR
             lfsr_reg(3 downto 1) <= lfsr_reg(2 downto 0);
