@@ -23,7 +23,7 @@ E4 : unsigned(6 downto 0); ~ Display suelo
 
 -- Puntos
 
-puntos : unsigned(6 downto 0); [Valores enteros: 0, 1,...]
+puntos : unsigned(6 downto 0); [Valores enteros: 0, 1, 2, 3, 4, 5] 5:Fase Completada
 
 -- Señal Botones (Con rebotes)
 
