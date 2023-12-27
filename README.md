@@ -23,7 +23,7 @@ E4 : unsigned(6 downto 0); ~ Display suelo
 
 -- Puntos
 
-puntos : unsigned(0 downto 0); [Valores enteros: 0, 1, 2, 3, 4, 5] 5:Fase Completada --Se almacena en Juego, fuera de Bloque_Puntos
+puntos : unsigned(2 downto 0); [Valores enteros: 0, 1, 2, 3, 4, 5] 5:Fase Completada --Se almacena en Juego, fuera de Bloque_Puntos
 
 -- Señal Botones (Con rebotes)
 
