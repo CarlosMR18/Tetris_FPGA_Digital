@@ -105,32 +105,36 @@ entity Bloque_Next is
 		   
 		   MiPieza_TP_act : out unsigned(6 downto 0);
 		   MiPieza_ND_act : out unsigned(6 downto 0);   
-		   PiezaFijada_Flag : out std_logic;
-		   PiezaBajada_Flag : out std_logic;
 		   E1_act : out unsigned(6 downto 0);
 		   E2_act : out unsigned(6 downto 0);
 		   E3_act : out unsigned(6 downto 0);
-		   E4_act : out unsigned(6 downto 0)
+		   E4_act : out unsigned(6 downto 0);
+		   
+		   NoActua_Flag : out std_logic;
+		   PiezaFijada_Flag : out std_logic;
+		   PiezaBajada_Flag : out std_logic
 		   );
 end Bloque_Next;
 
 
-
 architecture Behavioral of Bloque_Next is
+	type state_t is (ESPERA, RAPIDO_ALTO, RAPIDO_BAJO, LENTO);
+	signal ESTADO : state_t;
+	signal ena_time : std_logic;
+		
 	signal E_int : unsigned(6 downto 0);
 	signal MiPieza_TP_int  : unsigned(6 downto 0);
-	
-	signal Producto_BitaBit : unsigned(6 downto 0);
-	signal Suma_BitaBit : unsigned(6 downto 0);
 	signal E_aux : unsigned(6 downto 0);
 	signal aux_seg_E : std_logic;
 	signal aux_seg_F : std_logic;
 	
-	type state_t is (ESPERA, RAPIDO_ALTO, RAPIDO_BAJO, LENTO);
-	signal ESTADO : state_t;
-	signal ena_time : std_logic;
+	signal Producto_BitaBit : unsigned(6 downto 0);
+	signal Suma_BitaBit : unsigned(6 downto 0);
+	
 	signal NoActua_Flag : std_logic;
-	signal Ei_act : std_logic(6 downto 0);	
+	signal PiezaFijada_Flag : std_logic;
+	signal PiezaBajada_Flag : std_logic;
+		
 begin
 
 process(clk, reset)
@@ -295,10 +299,6 @@ MiPieza_TP_int <=	"0100000" when (ESTADO = RAPIDO_ALTO and MiPieza_TP(5) = '1' a
 
 Producto_BitaBit <= E_int and MiPieza_TP_int;
 Suma_BitaBit <= E_int or MiPieza_TP_int;
-
-with Producto_BitaBit select
-Ei_act <=	Ei_act when "0000000" else
-			E_int;
 
 with ESTADO select
 	MiPieza_TP_act <=	MiPieza_TP_int when RAPIDO_ALTO,
