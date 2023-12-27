@@ -1,7 +1,7 @@
 library IEEE;
 use ieee.std_logic_1164.all; --(std_logic; std_logic_vector)
 use ieee.numeric_std.all;
--- Falta definir TOP_LFSR con Maquina de Estados
+
 entity Bloque_Accion is
     Port ( clk : in std_logic;
            reset : in std_logic;
