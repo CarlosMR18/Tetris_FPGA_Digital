@@ -70,7 +70,9 @@ PiezaFijada_Flag : std:logic; --Bloque_Next
 
 PiezaBajada_Flag : std:logic; --Bloque_Next
 
-********_Flag : std:logic;
+PiezaBajada_Flag : std:logic; --Bloque_Next
+
+NoActua_Flag : std:logic; --Bloque_Next
 
 ********_Fin_Flag : std:logic;
 
