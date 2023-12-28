@@ -52,7 +52,7 @@ begin
 								"011" when (E3 = "1111111") else
 								"100" when (E4 = "1111111") else
 								"000";
-					if (Bloque_Linea_Flag = '1' and index/="000") then
+					if (Bloque_Puntos_Flag = '1' and index/="000") then
 						ESTADO <= PARPADEO_LINEA;
 						counter <= (others => '0');
 					end if;
@@ -93,7 +93,7 @@ begin
 								E4_pto <= E_linea;
 								
 						end case;
-							
+						ESTATE <= LIMPIO_LINEA;	
 					end if;
 				end if;
 				
