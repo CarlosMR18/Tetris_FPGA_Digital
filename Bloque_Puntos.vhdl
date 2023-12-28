@@ -122,8 +122,10 @@ begin
 							E2_pto <= E1;
 							E3_pto <= E2;
 							E4_pto <= E3;
+							
 						when others =>
-		       					
+		       				null;
+							
 					end case;
 					index <= "000";
 					ESTADO <= ESPERA;
