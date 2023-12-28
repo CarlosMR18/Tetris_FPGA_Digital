@@ -5,30 +5,30 @@ use IEEE.NUMERIC_STD.ALL;
 entity Bloque_Puntos is
 Port (  clk : in std_logic;
         reset : in std_logic;
-        Bloque_Linea_Flag : in std_logic;
+        Bloque_Puntos_Flag : in std_logic;
 		E1 : in unsigned(6 downto 0);
 		E2 : in unsigned(6 downto 0);
 		E3 : in unsigned(6 downto 0);
 		E4 : in unsigned(6 downto 0);
 		puntos : in unsigned(0 downto 0);
-		Bloque_Linea_Fin_Flag : out std_logic;
+		Bloque_Puntos_Fin_Flag : out std_logic;
 		E1_pto : out unsigned(6 downto 0);
 		E2_pto : out unsigned(6 downto 0);
 		E3_pto : out unsigned(6 downto 0);
 		E4_pto : out unsigned(6 downto 0);
-		puntos_act : out unsigned(0 downto 0);
+		puntos_act : out unsigned(0 downto 0));
 		
 end Bloque_Puntos;
 
 architecture Behavioral of Bloque_Puntos is
 
 	signal index : unsigned(2 downto 0);
-	type state_t is (ESPERA,PARPADEO_LINEA, LIMPIO_LINEA)
+	type state_t is (ESPERA,PARPADEO_LINEA, LIMPIO_LINEA);
 	signal ESTADO : state_t;
 	-- Señal de reloj de 125 MHz
 	constant cntMax1seg : integer := 125*(10**6)-1;
-	signal counter : integer range 0 to cntMax;
-	signal E_linea : unsigned(6 downto 0);;
+	signal counter : integer range 0 to cntMax1seg;
+	signal E_linea : unsigned(6 downto 0);
 	signal timer_expired : std_logic;
 	signal E1_pto : unsigned(6 downto 0);
 	signal E2_pto : unsigned(6 downto 0);
@@ -54,7 +54,7 @@ begin
 								"000";
 					if (Bloque_Linea_Flag = '1' and index/="000") then
 						ESTADO <= PARPADEO_LINEA;
-						cnt <= (others => '0');
+						counter <= (others => '0');
 					end if;
 				
 				when PARPADEO_LINEA =>
