@@ -2,7 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL; --(std_logic; std_logic_vector)
 use IEEE.NUMERIC_STD.ALL;
 
-entity Bloque_Linea is
+entity Bloque_Puntos is
 Port (  clk : in std_logic;
         reset : in std_logic;
         Bloque_Linea_Flag : in std_logic;
@@ -18,9 +18,9 @@ Port (  clk : in std_logic;
 		E4_pto : out unsigned(6 downto 0);
 		puntos_act : out unsigned(0 downto 0);
 		
-end Bloque_Linea;
+end Bloque_Puntos;
 
-architecture Behavioral of Bloque_Linea is
+architecture Behavioral of Bloque_Puntos is
 
 	signal index : unsigned(2 downto 0);
 	type state_t is (ESPERA,PARPADEO_LINEA, LIMPIO_LINEA)
