@@ -93,7 +93,7 @@ begin
 								E4_pto <= E_linea;
 								
 						end case;
-						ESTATE <= LIMPIO_LINEA;	
+						ESTADO <= LIMPIO_LINEA;	
 					end if;
 				end if;
 				
@@ -122,9 +122,10 @@ begin
 							E2_pto <= E1;
 							E3_pto <= E2;
 							E4_pto <= E3;
-							
+						when others =>
+		       					
 					end case;
-					index <= others;
+					index <= "000";
 					ESTADO <= ESPERA;
 					puntos_act <= puntos + 1;
 	end process;
