@@ -57,7 +57,7 @@ begin
            cont_2<=0;
 	   cont_1<=0;
         elsif (clk'event and clk = '1') then
-		if (MiPieza_TP=...)	
+		if (MiPieza_TP<="0010" or MiPieza_TP<="0100" or MiPieza_TP<="00010000" or MiPieza_TP<="00100000")	
 			if (cont_1=frec_1-1)
 				cont_1<=0;
 			else
