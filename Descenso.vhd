@@ -36,7 +36,7 @@ Port (clk : in std_logic;  -- Reloj del sistema
       reset : in std_logic;  -- Señal de reinicio
       MiPieza_ND : in unsigned(2 downto 0);
       MiPieza_TP: in unsigned(6 downto 0);
-      -- inicio_flag: out std_logic
+
  );
 end DescensoFichas;
 
@@ -48,28 +48,35 @@ architecture Behavioral of DescensoFichas is
 	signal cont_2: integer range 0 to frec_2;
 	signal cont_1: integer range 0 to frec_1;
 	signal enable_flag: std_logic;
+	signal enable_frec: std_logic :='1';
 	
 begin
 
    process(clk, reset)
    begin
         if reset = '1' then
-           cont_2<=0;
-	   cont_1<=0;
+			cont_2<=0;
+			cont_1<=0;
         elsif (clk'event and clk = '1') then
-		if (MiPieza_TP<="0010" or MiPieza_TP<="0100" or MiPieza_TP<="00010000" or MiPieza_TP<="00100000")	
-			if (cont_1=frec_1-1)
-				cont_1<=0;
-			else
-				cont_1<=cont_1+1;
-			end if;
-		else
-		    	if (cont_2=frec_2-1)
+			if (enable_frec='1') then
+				if (MiPieza_TP<="0010" or MiPieza_TP<="0100" or MiPieza_TP<="00010000" or MiPieza_TP<="00100000")	
+					if (cont_1<frec_1-1)
+						cont_1<=cont_1+1;
+					else
+						cont_1<0;
+					end if;
+				else
+					if (cont_2<frec_2-1)
+						cont_2<=cont_2+1;
+					else
+						cont_2<=0;
+					end if;
+				end if;
+			else 
 				cont_2<=0;
-			else
-				cont_2<=cont_2+1;
+				cont_1<=0;
 			end if;
-	end if;
+		end if;
     end process;
 
   enable_flag<='1' when ((cont_2=cont_2-1) or (cont_1=cont_1-1)) else '0';
